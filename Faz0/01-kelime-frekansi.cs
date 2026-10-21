@@ -1,17 +1,17 @@
 ﻿
 
-public class kelimefrekansi
+public class KelimeFrekansi
 {
     public static void Main(string[] args)
     {
-        
+
 
     }
 
     public static void KelimeFrekansiHesapla(string metin)
     {
         char[] ayraclar = metin.Where(c => char.IsPunctuation(c) || char.IsWhiteSpace(c)).Distinct().ToArray();
-        string[] kelimeler = metin.ToLowerInvariant().Split(ayraclar, StringSplitOptions.RemoveEmptyEntries);
+        string[] kelimeler = metin.ToLower(new System.Globalization.CultureInfo("tr-TR")).Split(ayraclar, StringSplitOptions.RemoveEmptyEntries);
 
         Dictionary<string, int> frekans = new Dictionary<string, int>();
 
@@ -22,22 +22,22 @@ public class kelimefrekansi
         }
 
 
-        Yazır(frekans);
+        Yazdir(frekans);
     }
 
-    public static void Yazır (Dictionary<string, int> frekans) 
+    public static void Yazdir(Dictionary<string, int> frekans)
     {
-        foreach (var item in frekans.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
+        foreach (var item in frekans.OrderByDescending(x => x.Value).ThenBy(x => x.Key).Take(3))
         {
-            if (item.Value >= 3)
-                Console.WriteLine($"{item.Key}: {item.Value}");
+            Console.WriteLine($"{item.Key}: {item.Value}");
         }
     }
 
 
     public static void KelimeFrekansiHesaplaNoLinq(string metin)
     {
-        string[] kelimeler = metin.ToLower().Split(new char[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+        char[] ayraclar = metin.Where(c => char.IsPunctuation(c) || char.IsWhiteSpace(c)).Distinct().ToArray();
+        string[] kelimeler = metin.ToLower(new System.Globalization.CultureInfo("tr-TR")).Split(ayraclar, StringSplitOptions.RemoveEmptyEntries);
         Dictionary<string, int> frekans = new Dictionary<string, int>();
         foreach (string item in kelimeler)
         {
@@ -53,7 +53,7 @@ public class kelimefrekansi
         }
 
         List<KeyValuePair<string, int>> frekansList = new List<KeyValuePair<string, int>>(frekans);
-       
+
         frekansList.Sort((x, y) =>
         {
             int valueComparison = y.Value.CompareTo(x.Value);
@@ -66,8 +66,17 @@ public class kelimefrekansi
 
 
 
-        Yazır(frekans);
+        YazdirList(frekansList);
     }
+
+    public static void YazdirList(List<KeyValuePair<string, int>> frekans)
+    {
+        foreach (var item in frekans.OrderByDescending(x => x.Value).ThenBy(x => x.Key).Take(3))
+        {
+            Console.WriteLine($"{item.Key}: {item.Value}");
+        }
+    }
+
 }
 
 
