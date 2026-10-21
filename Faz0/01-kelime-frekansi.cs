@@ -15,6 +15,7 @@ public class kelimefrekansi
     {
         string[] kelimeler = metin.ToLower().Split(new char[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
         Dictionary<string, int> frekans = new Dictionary<string, int>();
+
         foreach (string kelime in kelimeler)
         {
 
