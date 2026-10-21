@@ -4,30 +4,29 @@ public class kelimefrekansi
 {
     public static void Main(string[] args)
     {
-        string metin = "Bu bir örnek metindir. Bu metin, metin içindeki bu kelime frekansını hesaplamak için kullanılacaktır.";
-        Console.WriteLine(metin);
-        KelimeFrekansiHesapla(metin);
-        //KelimeFrekansiHesaplaNoLinq(metin);
+        
 
     }
 
     public static void KelimeFrekansiHesapla(string metin)
     {
-        string[] kelimeler = metin.ToLower().Split(new char[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+        char[] ayraclar = metin.Where(c => char.IsPunctuation(c) || char.IsWhiteSpace(c)).Distinct().ToArray();
+        string[] kelimeler = metin.ToLowerInvariant().Split(ayraclar, StringSplitOptions.RemoveEmptyEntries);
+
         Dictionary<string, int> frekans = new Dictionary<string, int>();
 
         foreach (string kelime in kelimeler)
         {
-
-            if (frekans.ContainsKey(kelime))
-            {
-                frekans[kelime]++;
-            }
-            else
-            {
-                frekans[kelime] = 1;
-            }
+            frekans.TryGetValue(kelime, out int mevcutSayi);
+            frekans[kelime] = mevcutSayi + 1;
         }
+
+
+        Yazır(frekans);
+    }
+
+    public static void Yazır (Dictionary<string, int> frekans) 
+    {
         foreach (var item in frekans.OrderByDescending(x => x.Value).ThenBy(x => x.Key))
         {
             if (item.Value >= 3)
@@ -67,11 +66,7 @@ public class kelimefrekansi
 
 
 
-        foreach (var item in frekansList)
-        {
-            if (item.Value >= 3)
-                Console.WriteLine($"{item.Key}: {item.Value}");
-        }
+        Yazır(frekans);
     }
 }
 
