@@ -70,15 +70,12 @@ public class KelimeFrekansi
 
     public static void YazdirList(List<KeyValuePair<string, int>> frekans)
     {
-        if (frekans.Count > 0) 
-        {
-            for (int i = 0; i < frekans.Count; i++)
-            {
-                Console.WriteLine($"{frekans[i].Key}: {frekans[i].Value}");
+        int limit = Math.Min(3, frekans.Count);
 
-            }
+        for (int i = 0; i < limit; i++)
+        {
+            Console.WriteLine($"{frekans[i].Key}: {frekans[i].Value}");
         }
-       
 
     }
 
