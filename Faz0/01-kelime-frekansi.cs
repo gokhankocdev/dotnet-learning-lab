@@ -36,21 +36,26 @@ public class KelimeFrekansi
 
     public static void KelimeFrekansiHesaplaNoLinq(string metin)
     {
-        char[] ayraclar = metin.Where(c => char.IsPunctuation(c) || char.IsWhiteSpace(c)).Distinct().ToArray();
-        string[] kelimeler = metin.ToLower(new System.Globalization.CultureInfo("tr-TR")).Split(ayraclar, StringSplitOptions.RemoveEmptyEntries);
-        Dictionary<string, int> frekans = new Dictionary<string, int>();
-        foreach (string item in kelimeler)
-        {
+        HashSet<char> ayracSeti = new HashSet<char>();
 
-            if (frekans.ContainsKey(item))
+        foreach (char c in metin)
+        {
+            if (char.IsPunctuation(c) || char.IsWhiteSpace(c))
             {
-                frekans[item]++;
-            }
-            else
-            {
-                frekans[item] = 1;
+                ayracSeti.Add(c);
             }
         }
+
+        char[] ayraclar = ayracSeti.ToArray();
+
+        string[] kelimeler = metin.ToLower(new System.Globalization.CultureInfo("tr-TR")).Split(ayraclar, StringSplitOptions.RemoveEmptyEntries);
+        Dictionary<string, int> frekans = new Dictionary<string, int>();
+        foreach (string kelime in kelimeler)
+        {
+            frekans.TryGetValue(kelime, out int mevcutSayi);
+            frekans[kelime] = mevcutSayi + 1;
+        }
+
 
         List<KeyValuePair<string, int>> frekansList = new List<KeyValuePair<string, int>>(frekans);
 
@@ -71,10 +76,12 @@ public class KelimeFrekansi
 
     public static void YazdirList(List<KeyValuePair<string, int>> frekans)
     {
-        foreach (var item in frekans.OrderByDescending(x => x.Value).ThenBy(x => x.Key).Take(3))
+        for (int i = 0; i < 3; i++)
         {
-            Console.WriteLine($"{item.Key}: {item.Value}");
+            Console.WriteLine($"{frekans[i].Key}: {frekans[i].Value}");
+
         }
+
     }
 
 }
