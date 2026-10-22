@@ -2,12 +2,6 @@
 
 public class KelimeFrekansi
 {
-    public static void Main(string[] args)
-    {
-
-
-    }
-
     public static void KelimeFrekansiHesapla(string metin)
     {
         char[] ayraclar = metin.Where(c => char.IsPunctuation(c) || char.IsWhiteSpace(c)).Distinct().ToArray();
@@ -45,8 +39,8 @@ public class KelimeFrekansi
                 ayracSeti.Add(c);
             }
         }
-
-        char[] ayraclar = ayracSeti.ToArray();
+        char[] ayraclar = new char[ayracSeti.Count];
+        ayracSeti.CopyTo(ayraclar);
 
         string[] kelimeler = metin.ToLower(new System.Globalization.CultureInfo("tr-TR")).Split(ayraclar, StringSplitOptions.RemoveEmptyEntries);
         Dictionary<string, int> frekans = new Dictionary<string, int>();
@@ -76,11 +70,15 @@ public class KelimeFrekansi
 
     public static void YazdirList(List<KeyValuePair<string, int>> frekans)
     {
-        for (int i = 0; i < 3; i++)
+        if (frekans.Count > 0) 
         {
-            Console.WriteLine($"{frekans[i].Key}: {frekans[i].Value}");
+            for (int i = 0; i < frekans.Count; i++)
+            {
+                Console.WriteLine($"{frekans[i].Key}: {frekans[i].Value}");
 
+            }
         }
+       
 
     }
 
